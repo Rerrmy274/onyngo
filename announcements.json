@@ -1,0 +1,28 @@
+{
+  "announcements": [
+    {
+      "id": 1,
+      "date": "2026-02-01",
+      "title": "Monthly Discounted Car Clinic",
+      "description": "Join us every first Saturday of the month for a discounted vehicle inspection. Book your spot now!",
+      "type": "clinic",
+      "active": true
+    },
+    {
+      "id": 2,
+      "date": "2026-01-31",
+      "title": "Special Offer: 15% Off Engine Diagnostics",
+      "description": "Get professional engine diagnostics at 15% off this February. Limited slots available.",
+      "type": "offer",
+      "active": false
+    },
+    {
+      "id": 3,
+      "date": "2026-01-28",
+      "title": "New Service: Electric Vehicle (EV) Inspection",
+      "description": "We now offer comprehensive EV pre-purchase inspections and diagnostics.",
+      "type": "service",
+      "active": false
+    }
+  ]
+}

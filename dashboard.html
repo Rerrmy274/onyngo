@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Stamford Auto Care</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --primary: #c9302c;
+      --dark: #2d3e50;
+      --sidebar-dark: #1a2332;
+      --light: #f8f9fa;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--light);
+    }
+    
+    /* Navbar */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 70px;
+      background: white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      z-index: 1000;
+    }
+    
+    .navbar-logo {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .navbar-logo img {
+      height: 45px;
+    }
+    
+    .navbar-logo span {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--dark);
+    }
+    
+    .navbar-right {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+    
+    .navbar-right a {
+      text-decoration: none;
+      color: #666;
+      font-weight: 500;
+    }
+    
+    .navbar-user {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      background: var(--light);
+    }
+    
+    .navbar-user span {
+      font-weight: 600;
+      color: var(--dark);
+    }
+    
+    .btn-book {
+      background: var(--primary);
+      color: white;
+      padding: 0.6rem 1.5rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    
+    /* Sidebar */
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 70px;
+      bottom: 0;
+      width: 240px;
+      background: var(--sidebar-dark);
+      color: white;
+      padding: 2rem 0;
+      overflow-y: auto;
+    }
+    
+    .user-info {
+      padding: 0 1.5rem;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+    
+    .user-info h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.3rem;
+    }
+    
+    .user-info p {
+      font-size: 0.85rem;
+      color: #aaa;
+    }
+    
+    .sidebar-nav {
+      list-style: none;
+    }
+    
+    .sidebar-nav li a {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 1.5rem;
+      color: #ccc;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+    
+    .sidebar-nav li a:hover,
+    .sidebar-nav li a.active {
+      background: rgba(201, 48, 44, 0.2);
+      color: white;
+      border-left: 3px solid var(--primary);
+    }
+    
+    .sidebar-footer {
+      position: absolute;
+      bottom: 2rem;
+      left: 1.5rem;
+    }
+    
+    .sidebar-footer a {
+      color: #ccc;
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+    
+    .btn-book-sidebar {
+      display: block;
+      margin: 1.5rem;
+      padding: 0.8rem;
+      background: var(--primary);
+      color: white;
+      text-align: center;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    
+    .logout-btn {
+      display: block;
+      margin: 1.5rem;
+      padding: 0.8rem;
+      background: transparent;
+      color: #ccc;
+      text-align: center;
+      border: 1px solid #444;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    
+    /* Main Content */
+    .main-content {
+      margin-left: 240px;
+      margin-top: 70px;
+      padding: 2rem;
+    }
+    
+    .header {
+      margin-bottom: 2rem;
+    }
+    
+    .header h1 {
+      color: var(--dark);
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .header p {
+      color: #666;
+    }
+    
+    /* Dashboard Grid */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    .card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    
+    .card h2 {
+      color: var(--dark);
+      margin-bottom: 1rem;
+      font-size: 1.3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .view-all {
+      font-size: 0.9rem;
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    
+    /* Spending Widget */
+    .spending-widget {
+      background: linear-gradient(135deg, #5e3a5e 0%, #3d2a4d 100%);
+      color: white;
+      padding: 2rem;
+      border-radius: 12px;
+    }
+    
+    .spending-widget h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      opacity: 0.9;
+    }
+    
+    .spending-amount {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+    }
+    
+    .spending-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    
+    .stat-item {
+      background: rgba(255,255,255,0.1);
+      padding: 1rem;
+      border-radius: 8px;
+    }
+    
+    .stat-item label {
+      font-size: 0.85rem;
+      opacity: 0.8;
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+    
+    .stat-item .value {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+    
+    /* Quick Actions */
+    .quick-actions {
+      display: grid;
+      gap: 1rem;
+    }
+    
+    .action-btn {
+      padding: 1rem;
+      border-radius: 8px;
+      text-align: center;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+    
+    .action-btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+    
+    .action-btn-secondary {
+      background: white;
+      color: var(--dark);
+      border: 2px solid #eee;
+    }
+    
+    .action-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    /* Vehicles Widget */
+    .vehicles-widget {
+      margin-top: 1.5rem;
+    }
+    
+    .vehicles-widget h4 {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      color: var(--dark);
+    }
+    
+    .add-vehicle-btn {
+      background: none;
+      border: none;
+      color: var(--primary);
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+    
+    .vehicle-list {
+      text-align: center;
+      padding: 2rem;
+      color: #999;
+    }
+    
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: #999;
+    }
+    
+    .empty-state svg {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 1rem;
+      opacity: 0.3;
+    }
+    
+    /* Table */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    table th,
+    table td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+    
+    table th {
+      background: var(--light);
+      color: var(--dark);
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    
+    .badge {
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    
+    .badge-pending {
+      background: #fff3cd;
+      color: #856404;
+    }
+    
+    .badge-confirmed {
+      background: #d4edda;
+      color: #155724;
+    }
+    
+    @media (max-width: 1024px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    /* Mobile Menu Toggle Button */
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 1.8rem;
+      cursor: pointer;
+      color: var(--dark);
+      padding: 0.5rem;
+    }
+    
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 998;
+    }
+    
+    .sidebar-overlay.active {
+      display: block;
+    }
+    
+    @media (max-width: 768px) {
+      .menu-toggle {
+        display: block;
+      }
+      
+      .navbar-right a:not(.btn-book) {
+        display: none;
+      }
+      
+      .navbar-logo span {
+        font-size: 1rem;
+      }
+      
+      .sidebar {
+        position: fixed;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        z-index: 999;
+        width: 280px;
+      }
+      
+      .sidebar.active {
+        transform: translateX(0);
+      }
+      
+      .main-content {
+        margin-left: 0;
+        padding: 1rem;
+      }
+      
+      .sidebar-nav li a {
+        padding: 1.2rem 1.5rem;
+        min-height: 48px;
+      }
+      
+      .dashboard-grid {
+        grid-template-columns: 1fr !important;
+      }
+      
+      .stat-card {
+        margin-bottom: 1rem;
+      }
+      
+      .btn-book-sidebar,
+      .logout-btn {
+        min-height: 48px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .navbar {
+        padding: 0 1rem;
+      }
+      
+      .navbar-logo img {
+        height: 35px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="navbar-logo">
+    <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+    <img src="logo.png" alt="Stamford Auto Care">
+    <span>STAMFORD AUTO CARE</span>
+  </div>
+  <div class="navbar-right">
+    <a href="index.html" class="btn-book">← Back to Website</a>
+    <div class="navbar-user">
+      <span id="userName">👤 User</span>
+    </div>
+  </div>
+</nav>
+
+<!-- Sidebar Overlay for mobile -->
+<div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+<!-- Sidebar -->
+<div class="sidebar">
+  <div class="user-info">
+    <h3 id="sidebarName">Edwin Onyango</h3>
+    <p id="sidebarPhone">0745035333</p>
+  </div>
+  
+  <ul class="sidebar-nav">
+    <li><a href="dashboard.html" class="active">📊 Dashboard</a></li>
+    <li><a href="vehicles.html">🚗 Vehicles</a></li>
+    <li><a href="appointments.html">📅 Appointments</a></li>
+    <li><a href="quotations.html">💰 Quotations</a></li>
+    <li><a href="invoices.html">📄 Invoices</a></li>
+    <li><a href="service-history.html">🔧 Service History</a></li>
+    <li><a href="profile.html">👤 Profile</a></li>
+  </ul>
+  
+  <a href="appointments.html" class="btn-book-sidebar">📅 Book Appointment</a>
+  <button class="logout-btn" onclick="logout()">🚪 Logout</button>
+</div>
+
+<!-- Main Content -->
+<div class="main-content">
+  <div class="header">
+    <h1 id="welcomeMessage">Welcome back, Edwin!</h1>
+    <p>Manage your vehicles, appointments, and service history</p>
+  </div>
+  
+  <!-- Dashboard Grid -->
+  <div class="dashboard-grid">
+    <!-- Left Column -->
+    <div>
+      <!-- Upcoming Appointments -->
+      <div class="card">
+        <h2>
+          📅 Upcoming Appointments
+          <a href="appointments.html" class="view-all">View All →</a>
+        </h2>
+        
+        <div class="empty-state" id="appointmentsList">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+            <line x1="16" y1="2" x2="16" y2="6"/>
+            <line x1="8" y1="2" x2="8" y2="6"/>
+            <line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+          <p>No upcoming appointments</p>
+          <a href="appointments.html" class="btn-book" style="display: inline-block; margin-top: 1rem; padding: 0.8rem 1.5rem; text-decoration: none;">Book Appointment</a>
+        </div>
+      </div>
+      
+      <!-- Recent Service History -->
+      <div class="card" style="margin-top: 2rem;">
+        <h2>
+          🔧 Recent Service History
+          <a href="service-history.html" class="view-all">View All →</a>
+        </h2>
+        
+        <div class="empty-state">
+          <p>No service history yet</p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Right Column -->
+    <div>
+      <!-- Spending Widget -->
+      <div class="spending-widget">
+        <h3>💰 Your Spending</h3>
+        <div class="spending-amount">KES <span id="totalSpent">0</span></div>
+        <p style="font-size: 0.9rem; opacity: 0.8; margin-bottom: 1.5rem;">Total Spent</p>
+        
+        <div class="spending-stats">
+          <div class="stat-item">
+            <label>This Year</label>
+            <div class="value">KES <span id="yearSpent">0</span></div>
+          </div>
+          <div class="stat-item">
+            <label>Pending</label>
+            <div class="value">KES <span id="pendingAmount">0</span></div>
+          </div>
+          <div class="stat-item">
+            <label>Active Jobs</label>
+            <div class="value" id="activeJobs">0</div>
+          </div>
+          <div class="stat-item">
+            <label>Completed</label>
+            <div class="value" id="completedJobs">0</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Quick Actions -->
+      <div class="card" style="margin-top: 2rem;">
+        <h2>Quick Actions</h2>
+        <div class="quick-actions">
+          <a href="appointments.html" class="action-btn action-btn-primary">Book Appointment</a>
+          <a href="vehicles.html" class="action-btn action-btn-secondary">Manage Vehicles</a>
+        </div>
+      </div>
+      
+      <!-- My Vehicles -->
+      <div class="vehicles-widget">
+        <h4>
+          🚗 My Vehicles
+          <a href="vehicles.html" class="add-vehicle-btn" title="Add Vehicle">+</a>
+        </h4>
+        <div class="vehicle-list">
+          <p>No vehicles registered</p>
+          <a href="vehicles.html" style="color: var(--primary); text-decoration: none; font-weight: 600; margin-top: 0.5rem; display: inline-block;">Add Vehicle →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function toggleSidebar() {
+  const sidebar = document.querySelector('.sidebar');
+  const overlay = document.querySelector('.sidebar-overlay');
+  sidebar.classList.toggle('active');
+  overlay.classList.toggle('active');
+}
+
+// Check if user is logged in
+function checkAuth() {
+  const user = JSON.parse(localStorage.getItem('loggedInUser') || 'null');
+  
+  if (!user) {
+    window.location.href = 'login.html';
+    return;
+  }
+  
+  // Update UI with user info
+  document.getElementById('userName').textContent = `👤 ${user.firstName}`;
+  document.getElementById('welcomeMessage').textContent = `Welcome back, ${user.firstName}!`;
+  document.getElementById('sidebarName').textContent = `${user.firstName} ${user.lastName}`;
+  document.getElementById('sidebarPhone').textContent = user.phone;
+}
+
+function logout() {
+  if (confirm('Are you sure you want to logout?')) {
+    localStorage.removeItem('loggedInUser');
+    window.location.href = 'login.html';
+  }
+}
+
+// Load dashboard data
+function loadDashboard() {
+  const appointments = JSON.parse(localStorage.getItem('appointments') || '[]');
+  const vehicles = JSON.parse(localStorage.getItem('vehicles') || '[]');
+  const invoices = JSON.parse(localStorage.getItem('invoices') || '[]');
+  const serviceHistory = JSON.parse(localStorage.getItem('serviceHistory') || '[]');
+  
+  // Update spending stats
+  const totalSpent = serviceHistory.reduce((sum, s) => sum + (parseFloat(s.cost) || 0), 0);
+  const pendingInvoices = invoices.filter(i => i.status === 'Pending');
+  const pendingAmount = pendingInvoices.reduce((sum, i) => sum + (parseFloat(i.amount) || 0), 0);
+  
+  document.getElementById('totalSpent').textContent = totalSpent.toLocaleString();
+  document.getElementById('yearSpent').textContent = totalSpent.toLocaleString();
+  document.getElementById('pendingAmount').textContent = pendingAmount.toLocaleString();
+  document.getElementById('activeJobs').textContent = appointments.filter(a => a.status === 'Pending').length;
+  document.getElementById('completedJobs').textContent = serviceHistory.length;
+  
+  // Load appointments
+  if (appointments.length > 0) {
+    const appointmentsList = document.getElementById('appointmentsList');
+    appointmentsList.innerHTML = `
+      <table>
+        <thead>
+          <tr>
+            <th>Date & Time</th>
+            <th>Vehicle</th>
+            <th>Service</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${appointments.slice(0, 3).map(apt => `
+            <tr>
+              <td>${apt.date} ${apt.time}</td>
+              <td>${apt.vehicle}</td>
+              <td>${apt.service}</td>
+              <td><span class="badge badge-${apt.status.toLowerCase()}">${apt.status}</span></td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    `;
+  }
+  
+  // Load vehicles
+  if (vehicles.length > 0) {
+    document.querySelector('.vehicle-list').innerHTML = `
+      <p style="color: #333; font-weight: 600;">${vehicles.length} vehicle(s) registered</p>
+      <a href="vehicles.html" style="color: var(--primary); text-decoration: none; font-weight: 600; margin-top: 0.5rem; display: inline-block;">View All →</a>
+    `;
+  }
+}
+
+checkAuth();
+loadDashboard();
+</script>
+
+</body>
+</html>

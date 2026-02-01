@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us - Stamford Auto Care</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --primary: #c9302c;
+      --dark: #0d1b2a;
+      --light: #f8f9fa;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+    }
+    
+    /* Navigation */
+    .navbar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.98);
+      padding: 1rem 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+    }
+    
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--dark);
+    }
+    
+    .nav-logo img { height: 50px; }
+    
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+      align-items: center;
+    }
+    
+    .nav-links a {
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+    
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--primary);
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), #a82824);
+      color: white !important;
+      padding: 0.7rem 1.8rem;
+      border-radius: 25px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(201, 48, 44, 0.4);
+    }
+    
+    /* Hero */
+    .hero {
+      margin-top: 70px;
+      background: linear-gradient(135deg, var(--dark) 0%, #1a1a2e 100%);
+      color: white;
+      padding: 5rem 5%;
+      text-align: center;
+    }
+    
+    .hero h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+    
+    .hero p {
+      font-size: 1.3rem;
+      opacity: 0.9;
+    }
+    
+    /* Section */
+    .section {
+      padding: 5rem 5%;
+    }
+    
+    .section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    
+    .section-header h2 {
+      font-size: 2.5rem;
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+    
+    .section-header p {
+      font-size: 1.1rem;
+      color: #666;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    
+    /* Content Grid */
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      align-items: start;
+    }
+    
+    .content-box {
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .content-box h3 {
+      color: var(--primary);
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+    
+    .content-box p {
+      color: #666;
+      margin-bottom: 1rem;
+      line-height: 1.8;
+    }
+    
+    .content-box ul {
+      color: #666;
+      line-height: 2;
+      margin-left: 1.5rem;
+    }
+    
+    /* CEO Section */
+    .ceo-section {
+      background: var(--light);
+    }
+    
+    .ceo-grid {
+      display: grid;
+      grid-template-columns: 450px 1fr;
+      gap: 3rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      align-items: start;
+    }
+    
+    .ceo-card-left {
+      background: linear-gradient(135deg, #2d3e50 0%, #1a2332 100%);
+      padding: 3rem;
+      border-radius: 15px;
+      text-align: center;
+      color: white;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    
+    .ceo-image-frame {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+    }
+    
+    .ceo-image-frame img {
+      width: 100%;
+      border-radius: 8px;
+    }
+    
+    .ceo-card-left h3 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .ceo-card-left .ceo-title {
+      color: var(--primary);
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 2rem;
+    }
+    
+    .ceo-contact {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.8rem;
+      background: rgba(255,255,255,0.1);
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+    
+    .ceo-contact svg {
+      width: 18px;
+      height: 18px;
+    }
+    
+    .ceo-info p {
+      color: #666;
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+    
+    /* Message Box */
+    .message-box {
+      background: linear-gradient(135deg, var(--primary), #a82824);
+      color: white;
+      padding: 2.5rem;
+      border-radius: 10px;
+      margin-top: 2rem;
+      border-left: 5px solid white;
+    }
+    
+    .message-box h4 {
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+    }
+    
+    .message-box p {
+      color: white;
+      font-style: italic;
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+    
+    .message-box .signature {
+      text-align: right;
+      font-weight: 600;
+      margin-top: 1.5rem;
+    }
+    
+    /* Why Choose Us */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 3rem auto 0;
+    }
+    
+    .feature-card {
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      text-align: center;
+      transition: all 0.3s;
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    }
+    
+    .feature-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+    
+    .feature-card h4 {
+      color: var(--dark);
+      margin-bottom: 0.5rem;
+    }
+    
+    .feature-card p {
+      color: #666;
+      font-size: 0.95rem;
+    }
+    
+    /* CTA Section */
+    .cta-section {
+      background: linear-gradient(135deg, var(--primary), #a82824);
+      color: white;
+      text-align: center;
+      padding: 5rem 5%;
+    }
+    
+    .cta-section h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    .cta-section p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+    }
+    
+    .cta-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    
+    .btn-secondary {
+      background: white;
+      color: var(--primary);
+      padding: 0.7rem 1.8rem;
+      border-radius: 25px;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s;
+    }
+    
+    .btn-secondary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(255, 255, 255, 0.3);
+    }
+    
+    /* Footer */
+    footer {
+      background: var(--dark);
+      color: white;
+      padding: 3rem 5%;
+      text-align: center;
+    }
+    
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto 2rem;
+      text-align: left;
+    }
+    
+    .footer-col h4 {
+      margin-bottom: 1rem;
+      color: var(--primary);
+    }
+    
+    .footer-col ul {
+      list-style: none;
+    }
+    
+    .footer-col ul li {
+      margin-bottom: 0.5rem;
+    }
+    
+    .footer-col ul li a {
+      color: #ccc;
+      text-decoration: none;
+    }
+    
+    .footer-col ul li a:hover {
+      color: white;
+    }
+    
+    /* Mobile */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+      
+      .hero h1 {
+        font-size: 2rem;
+      }
+      
+      .content-grid,
+      .ceo-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .cta-section h2 {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+<script src="data-manager.js"></script>
+<script>
+window.addEventListener('DOMContentLoaded', function() {
+  const user = StamfordDataManager.currentUser.get();
+  const portalLinks = document.querySelectorAll('a[href="login.html"]');
+  if (user && localStorage.getItem('stamford_remember_me') === 'true') {
+    portalLinks.forEach(link => {
+      if(link.classList.contains('btn-primary')) {
+        link.textContent = `👤 ${user.firstName}`;
+        link.href = 'dashboard.html';
+      }
+    });
+  }
+});
+</script>
+
+<!-- Navigation -->
+<nav class="navbar">
+  <div class="nav-logo">
+    <img src="logo.png" alt="Stamford Auto Care">
+  </div>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="index.html#services">Services</a></li>
+    <li><a href="about.html" class="active">About</a></li>
+    <li><a href="index.html#gallery">Gallery</a></li>
+    <li><a href="index.html#testimonials">Reviews</a></li>
+    <li><a href="login.html" class="btn-primary">Customer Portal</a></li>
+  </ul>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <h1>About Stamford Auto Care</h1>
+  <p>20+ Years of Professional Automotive Excellence</p>
+</section>
+
+<!-- Company Profile -->
+<section class="section">
+  <div class="section-header">
+    <h2>Company Profile</h2>
+    <p>Your trusted partner for professional automotive care in Nairobi</p>
+  </div>
+  
+  <div class="content-grid">
+    <div class="content-box">
+      <h3>Who We Are</h3>
+      <p>Stamford Auto Care is a trusted automotive repair and maintenance garage conveniently located on Mombasa Road, behind ICD, Nairobi. We specialize in professional vehicle servicing, mechanical repairs, diagnostics, and preventive maintenance for all vehicle types.</p>
+      <p>The garage is led by Stephen Midiny, a highly experienced Automotive Engineer with over 20 years of industry expertise. His deep technical knowledge ensures accurate diagnostics, quality repairs, and durable automotive solutions.</p>
+      <p>At Stamford Auto Care, we are committed to professionalism, transparency, and customer satisfaction. By combining modern diagnostic tools with proven engineering practices, we deliver reliable, safe, and cost-effective auto care services.</p>
+    </div>
+    
+    <div class="content-box">
+      <h3>Our Mission</h3>
+      <p>To provide reliable, high-quality automotive repair and maintenance services through professional engineering expertise, honest workmanship, and customer-focused solutions.</p>
+      
+      <h3 style="margin-top: 2rem;">Our Vision</h3>
+      <p>To become a leading and trusted auto care garage in Nairobi by setting the standard for technical excellence, integrity, and dependable automotive service.</p>
+      
+      <h3 style="margin-top: 2rem;">Why Choose Us</h3>
+      <ul>
+        <li>✓ 20+ years of professional experience</li>
+        <li>✓ Expert automotive engineering</li>
+        <li>✓ Modern diagnostic equipment</li>
+        <li>✓ Quality parts and workmanship</li>
+        <li>✓ Transparent pricing</li>
+        <li>✓ Customer-focused service</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- CEO Section -->
+<section class="section ceo-section">
+  <div class="section-header">
+    <h2>Meet Our CEO</h2>
+    <p>Leadership driven by expertise and integrity</p>
+  </div>
+  
+  <div class="ceo-grid">
+    <div class="ceo-card-left">
+      <div class="ceo-image-frame">
+        <img src="new_ceo.jpeg" alt="Stephen Midiny - CEO">
+      </div>
+      
+      <h3>Stephen Midiny</h3>
+      <p class="ceo-title">Chief Executive Officer & Automotive Engineer</p>
+      
+      <div class="ceo-contact">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+          <polyline points="22,6 12,13 2,6"/>
+        </svg>
+        <span><a href="mailto:ochiengstephen317@gmail.com">ochiengstephen317@gmail.com</a></span>
+      </div>
+      
+      <div class="ceo-contact">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+        </svg>
+        <span>(+254) 720 269 926</span>
+      </div>
+    </div>
+    
+    <div class="ceo-info">
+      <h3 style="color: var(--dark); font-size: 2rem; margin-bottom: 0.5rem;">About Our CEO</h3>
+      
+      <p>Stephen Midiny, Chief Executive Officer of Stamford Auto Care, is a highly respected Automotive Engineer with over 20 years of hands-on experience in vehicle diagnostics, mechanical systems, and advanced automotive repairs.</p>
+      
+      <p>His leadership is defined by professionalism, technical excellence, and integrity. Stephen has built Stamford Auto Care on a foundation of accurate diagnostics, quality workmanship, and modern automotive standards. Under his guidance, the garage consistently delivers dependable, long-lasting solutions that prioritize vehicle safety and performance.</p>
+      
+      <p>Driven by a vision of excellence, Stephen continues to position Stamford Auto Care as a trusted auto service provider along Mombasa Road and across Nairobi.</p>
+      
+      <div class="message-box">
+        <h4>Founder's Message</h4>
+        <p>"At Stamford Auto Care, our commitment is to deliver honest, reliable, and professional automotive solutions. With over 20 years of experience in automotive engineering, I believe in accurate diagnostics, quality workmanship, and long-term vehicle reliability. Every vehicle entrusted to us receives the same level of care, precision, and professionalism."</p>
+        <p class="signature">— Stephen Midiny, CEO</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section class="section">
+  <div class="section-header">
+    <h2>What Sets Us Apart</h2>
+    <p>Excellence in every aspect of automotive care</p>
+  </div>
+  
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">🔧</div>
+      <h4>Expert Engineering</h4>
+      <p>20+ years of automotive engineering expertise ensuring accurate diagnostics and quality repairs</p>
+    </div>
+    
+    <div class="feature-card">
+      <div class="feature-icon">⚙️</div>
+      <h4>Modern Equipment</h4>
+      <p>Advanced diagnostic tools and equipment for precise vehicle analysis</p>
+    </div>
+    
+    <div class="feature-card">
+      <div class="feature-icon">✅</div>
+      <h4>Quality Assurance</h4>
+      <p>Rigorous quality checks on all repairs and services performed</p>
+    </div>
+    
+    <div class="feature-card">
+      <div class="feature-icon">💎</div>
+      <h4>Genuine Parts</h4>
+      <p>Use of quality, reliable parts for long-lasting vehicle performance</p>
+    </div>
+    
+    <div class="feature-card">
+      <div class="feature-icon">👥</div>
+      <h4>Customer Focus</h4>
+      <p>Transparent communication and customer satisfaction at every step</p>
+    </div>
+    
+    <div class="feature-card">
+      <div class="feature-icon">🏆</div>
+      <h4>Proven Track Record</h4>
+      <p>Two decades of trusted service to the Nairobi automotive community</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+  <h2>Experience Professional Auto Care</h2>
+  <p>Trust your vehicle to 20+ years of automotive engineering expertise</p>
+  <div class="cta-buttons">
+    <a href="index.html#booking" class="btn-secondary">Book Service</a>
+    <a href="tel:+254720269926" class="btn-secondary">Call: 0720 269926</a>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-col">
+      <h4>Stamford Auto Care</h4>
+      <p>Professional automotive repair and maintenance services. 20+ years of trusted expertise along Mombasa Road, Nairobi.</p>
+    </div>
+    
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="index.html#services">Our Services</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="index.html#gallery">Our Work</a></li>
+        <li><a href="login.html">Customer Portal</a></li>
+      </ul>
+    </div>
+    
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li>📞 0720 269926</li>
+        <li>📍 Mombasa Road, Behind ICD, Nair

@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog - Stamford Auto Care</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --primary: #c9302c;
+      --dark: #0d1b2a;
+      --light: #f8f9fa;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+    }
+    
+    /* Navigation */
+    .navbar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.98);
+      padding: 1rem 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+    }
+    
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--dark);
+    }
+    
+    .nav-logo img { height: 50px; }
+    
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+      align-items: center;
+    }
+    
+    .nav-links a {
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+    
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--primary);
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), #a82824);
+      color: white !important;
+      padding: 0.7rem 1.8rem;
+      border-radius: 25px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(201, 48, 44, 0.4);
+    }
+    
+    /* Hero */
+    .hero {
+      margin-top: 70px;
+      background: linear-gradient(135deg, var(--dark) 0%, #1a1a2e 100%);
+      color: white;
+      padding: 5rem 5%;
+      text-align: center;
+    }
+    
+    .hero h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+    
+    .hero p {
+      font-size: 1.3rem;
+      opacity: 0.9;
+    }
+    
+    /* Section */
+    .section {
+      padding: 5rem 5%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    
+    .section-header h2 {
+      font-size: 2.5rem;
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+    
+    /* Blog Grid */
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 2rem;
+    }
+    
+    .blog-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+    
+    .blog-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    }
+    
+    .blog-card-header {
+      background: linear-gradient(135deg, var(--primary), #a82824);
+      color: white;
+      padding: 2rem;
+      min-height: 150px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    
+    .blog-card-header h3 {
+      font-size: 1.4rem;
+      line-height: 1.4;
+    }
+    
+    .blog-card-body {
+      padding: 2rem;
+    }
+    
+    .blog-card-body p {
+      color: #666;
+      margin-bottom: 1.5rem;
+      line-height: 1.8;
+    }
+    
+    .read-more {
+      color: var(--primary);
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .read-more:hover {
+      gap: 1rem;
+    }
+    
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.8);
+      z-index: 2000;
+      overflow-y: auto;
+    }
+    
+    .modal.active {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    
+    .modal-content {
+      background: white;
+      padding: 3rem;
+      border-radius: 15px;
+      max-width: 800px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+    }
+    
+    .modal-close {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: none;
+      border: none;
+      font-size: 2rem;
+      cursor: pointer;
+      color: #999;
+    }
+    
+    .modal-close:hover {
+      color: var(--primary);
+    }
+    
+    .modal-content h2 {
+      color: var(--dark);
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .modal-content h3 {
+      color: var(--primary);
+      font-size: 1.5rem;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+    }
+    
+    .modal-content p,
+    .modal-content ul {
+      color: #666;
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+    }
+    
+    .modal-content ul {
+      margin-left: 2rem;
+    }
+    
+    .modal-content li {
+      margin-bottom: 0.8rem;
+    }
+    
+    /* Footer */
+    footer {
+      background: var(--dark);
+      color: white;
+      padding: 3rem 5%;
+      text-align: center;
+    }
+    
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto 2rem;
+      text-align: left;
+    }
+    
+    .footer-col h4 {
+      margin-bottom: 1rem;
+      color: var(--primary);
+    }
+    
+    .footer-col ul {
+      list-style: none;
+    }
+    
+    .footer-col ul li {
+      margin-bottom: 0.5rem;
+    }
+    
+    .footer-col ul li a {
+      color: #ccc;
+      text-decoration: none;
+    }
+    
+    .footer-col ul li a:hover {
+      color: white;
+    }
+    
+    /* Mobile */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+      
+      .hero h1 {
+        font-size: 2rem;
+      }
+      
+      .blog-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .modal-content {
+        padding: 2rem 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+<script src="data-manager.js"></script>
+<script>
+window.addEventListener('DOMContentLoaded', function() {
+  const user = StamfordDataManager.currentUser.get();
+  const portalLinks = document.querySelectorAll('a[href="login.html"]');
+  if (user && localStorage.getItem('stamford_remember_me') === 'true') {
+    portalLinks.forEach(link => {
+      if(link.classList.contains('btn-primary')) {
+        link.textContent = `👤 ${user.firstName}`;
+        link.href = 'dashboard.html';
+      }
+    });
+  }
+});
+</script>
+
+<!-- Navigation -->
+<nav class="navbar">
+  <div class="nav-logo">
+    <img src="logo.png" alt="Stamford Auto Care">
+    <span>Stamford Auto Care</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="index.html#services">Services</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="blog.html" class="active">Blog</a></li>
+    <li><a href="index.html#testimonials">Reviews</a></li>
+    <li><a href="login.html" class="btn-primary">Customer Portal</a></li>
+  </ul>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <h1>Automotive Care Blog</h1>
+  <p>Expert advice and insights on vehicle maintenance</p>
+</section>
+
+<!-- Blog Section -->
+<section class="section">
+  <div class="blog-grid">
+    
+    <!-- Article 1 -->
+    <div class="blog-card" onclick="openModal('article1')">
+      <div class="blog-card-header">
+        <img src="blog1.jpg" alt="Car Service">
+        <h3>How Often Should You Service Your Car in Kenya?</h3>
+      </div>
+      <div class="blog-card-body">
+        <p>Learn the recommended service intervals for your vehicle based on Kenyan road conditions and climate...</p>
+        <a class="read-more">Read More →</a>
+      </div>
+    </div>
+    
+    <!-- Article 2 -->
+    <div class="blog-card" onclick="openModal('article2')">
+      <div class="blog-card-header">
+        <img src="blog1.jpg" alt="Car Service">
+        <h3>Warning Signs Your Car Needs Immediate Attention</h3>
+      </div>
+      <div class="blog-card-body">
+        <p>Don't ignore these critical warning signs that could prevent costly repairs or dangerous breakdowns...</p>
+        <a class="read-more">Read More →</a>
+      </div>
+    </div>
+    
+    <!-- Article 3 -->
+    <div class="blog-card" onclick="openModal('article3')">
+      <div class="blog-card-header">
+        <img src="blog1.jpg" alt="Car Service">
+        <h3>Why Engine Diagnostics Save You Money</h3>
+      </div>
+      <div class="blog-card-body">
+        <p>Discover how professional engine diagnostics can identify problems early and save you thousands of shillings...</p>
+        <a class="read-more">Read More →</a>
+      </div>
+    </div>
+    
+    <!-- Article 4 -->
+    <div class="blog-card" onclick="openModal('article4')">
+      <div class="blog-card-header">
+        <img src="blog1.jpg" alt="Car Service">
+        <h3>The Importance of Preventive Maintenance</h3>
+      </div>
+      <div class="blog-card-body">
+        <p>Why regular preventive maintenance is your best investment in vehicle longevity and safety...</p>
+        <a class="read-more">Read More →</a>
+      </div>
+    </div>
+    
+    <!-- Article 5 -->
+    <div class="blog-card" onclick="openModal('article5')">
+      <div class="blog-card-header">
+        <img src="blog1.jpg" alt="Car Service">
+        <h3>Vehicle Maintenance and Legal Responsibility</h3>
+      </div>
+      <div class="blog-card-body">
+        <p>Understanding your legal obligations as a vehicle owner in Kenya...</p>
+        <a class="read-more">Read More →</a>
+      </div>
+    </div>
+    
+    <!-- Article 6 -->
+    <div class="blog-card" onclick="openModal('article6')">
+      <div class="blog-card-header">
+        <img src="blog1.jpg" alt="Car Service">
+        <h3>How Poor Vehicle Maintenance Can Affect Insurance Claims</h3>
+      </div>
+      <div class="blog-card-body">
+        <p>Learn how neglecting vehicle maintenance could invalidate your insurance coverage...</p>
+        <a class="read-more">Read More →</a>
+      </div>
+    </div>
+    
+    <!-- Article 7 -->
+    <div class="blog-card" onclick="openModal('article7')">
+      <div class="blog-card-header">
+        <img src="blog1.jpg" alt="Car Service">
+        <h3>Roadworthiness Inspections and Compliance</h3>
+      </div>
+      <div class="blog-card-body">
+        <p>Everything you need to know about roadworthiness inspections and staying compliant with regulations...</p>
+        <a class="read-more">Read More →</a>
+      </div>
+    </div>
+    
+  </div>
+</section>
+
+<!-- Modals -->
+<div class="modal" id="article1">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeModal('article1')">×</button>
+    <h2>How Often Should You Service Your Car in Kenya?</h2>
+    
+    <p>Regular vehicle servicing is crucial for maintaining your car's performance, safety, and longevity. In Kenya, where road conditions vary from smooth highways to rough terrain, following the right service schedule is essential.</p>
+    
+    <h3>Recommended Service Intervals</h3>
+    <ul>
+      <li><strong>Oil Change:</strong> Every 5,000 - 7,500 km or every 3-6 months</li>
+      <li><strong>General Service:</strong> Every 10,000 km or every 6 months</li>
+      <li><strong>Major Service:</strong> Every 40,000 km or annually</li>
+      <li><strong>Brake Inspection:</strong> Every 10,000 km</li>
+      <li><strong>Tire Rotation:</strong> Every 10,000 km</li>
+    </ul>
+    
+    <h3>Factors Affecting Service Frequency in Kenya</h3>
+    <p><strong>Driving Conditions:</strong> If you frequently drive on rough roads, in heavy traffic, or in dusty conditions, you may need more frequent servicing.</p>
+    <p><strong>Climate:</strong> Kenya's tropical climate with high temperatures can affect engine oil and fluids, requiring more frequent checks.</p>
+    <p><strong>Vehicle Age:</strong> Older vehicles typically require more frequent maintenance.</p>
+    
+    <h3>Why Regular Servicing Matters</h3>
+    <ul>
+      <li>Prevents expensive repairs by catching issues early</li>
+      <li>Maintains fuel efficiency</li>
+      <li>Ensures vehicle safety</li>
+      <li>Preserves resale value</li>
+      <li>Keeps warranty valid (for newer vehicles)</li>
+    </ul>
+    
+    <p><strong>Need professional service?</strong> Book your appointment with Stamford Auto Care today.</p>
+  </div>
+</div>
+
+<div class="modal" id="article2">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeModal('article2')">×</button>
+    <h2>Warning Signs Your Car Needs Immediate Attention</h2>
+    
+    <p>Your vehicle communicates problems through various warning signs. Ignoring these signals can lead to dangerous situations, costly repairs, or complete breakdowns.</p>
+    
+    <h3>Critical Warning Signs</h3>
+    
+    <p><strong>1. Dashboard Warning Lights</strong></p>
+    <ul>
+      <li>Check Engine Light - indicates engine problems</li>
+      <li>Brake Warning Light - brake system failure</li>
+      <li>Oil Pressure Light - low oil pressure</li>
+      <li>Temperature Warning - engine overheating</li>
+      <li>Battery Light - charging system problems</li>
+    </ul>
+    
+    <p><strong>2. Strange Noises</strong></p>
+    <ul>
+      <li>Grinding when braking - worn brake pads</li>
+      <li>Knocking from engine - serious engine issues</li>
+      <li>Squealing belts - worn or loose belts</li>
+      <li>Clicking sounds - possible CV joint failure</li>
+    </ul>
+    
+    <p><strong>3. Performance Changes</strong></p>
+    <ul>
+      <li>Difficulty starting</li>
+      <li>Reduced power or acceleration</li>
+      <li>Excessive fuel consumption</li>
+      <li>Rough idling or stalling</li>
+      <li>Vibrations or shaking</li>
+    </ul>
+    
+    <p><strong>4. Fluid Leaks</strong></p>
+    <p>Any fluid leaking under your parked car requires immediate inspection. Different colored fluids indicate different problems:</p>
+    <ul>
+      <li>Dark brown/black - engine oil</li>
+      <li>Red - transmission fluid or power steering</li>
+      <li>Green/orange - coolant</li>
+      <li>Clear - water condensation (normal) or brake fluid (serious)</li>
+    </ul>
+    
+    <p><strong>Don't wait!</strong> If you notice any of these signs, contact Stamford Auto Care immediately for professional diagnostics.</p>
+  </div>
+</div>
+
+<div class="modal" id="article3">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeModal('article3')">×</button>
+    <h2>Why Engine Diagnostics Save You Money</h2>
+    
+    <p>Modern vehicles are equipped with sophisticated computer systems that monitor hundreds of components. Professional engine diagnostics can identify problems before they become expensive failures.</p>
+    
+    <h3>What is Engine Diagnostics?</h3>
+    <p>Engine diagnostics involves using specialized computer equipment to read error codes and data from your vehicle's onboard computer (ECU). This reveals issues that might not be visible during a basic inspection.</p>
+    
+    <h3>How Diagnostics Save You Money</h3>
+    
+    <p><strong>1. Early Problem Detection</strong></p>
+    <p>Diagnostics can identify minor issues before they escalate into major repairs. For example, a small sensor failure detected early might cost KES 5,000 to fix, but if left unaddressed, could lead to engine damage costing KES 150,000+.</p>
+    
+    <p><strong>2. Accurate Problem Identification</strong></p>
+    <p>Instead of guessing and replacing parts unnecessarily, diagnostics pinpoint the exact problem, eliminating trial-and-error repairs that waste money.</p>
+    
+    <p><strong>3. Prevents Breakdown Costs</strong></p>
+    <p>Regular diagnostic checks can prevent unexpected breakdowns that result in:
+    <ul>
+      <li>Towing fees</li>
+      <li>Emergency repair costs (typically higher)</li>
+      <li>Lost work time</li>
+      <li>Inconvenience and stress</li>
+    </ul>
+    
+    <p><strong>4. Maintains Fuel Efficiency</strong></p>
+    <p>Diagnostics can identify issues causing poor fuel economy, helping you save on fuel costs over time.</p>
+    
+    <h3>When Should You Get Engine Diagnostics?</h3>
+    <ul>
+      <li>When the Check Engine Light appears</li>
+      <li>Before buying a used vehicle</li>
+      <li>When experiencing performance issues</li>
+      <li>As part of regular maintenance (annually)</li>
+      <li>After any major repair</li>
+    </ul>
+    
+    <p><strong>Professional diagnostics at Stamford Auto Care</strong> use advanced equipment and 20+ years of experience to accurately identify and resolve issues.</p>
+  </div>
+</div>
+
+<div class="modal" id="article4">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeModal('article4')">×</button>
+    <h2>The Importance of Preventive Maintenance</h2>
+    
+    <p>Preventive maintenance is scheduled servicing performed before problems occur. It's your best investment in vehicle longevity, safety, and reliability.</p>
+    
+    <h3>What is Preventive Maintenance?</h3>
+    <p>Preventive maintenance includes regular services like oil changes, filter replacements, fluid checks, brake inspections, and tire rotations performed at specified intervals.</p>
+    
+    <h3>Key Benefits</h3>
+    
+    <p><strong>1. Extends Vehicle Life</strong></p>
+    <p>Regular maintenance can extend your vehicle's lifespan by years. A well-maintained car can easily exceed 300,000 km, while a neglected one might fail at 150,000 km.</p>
+    
+    <p><strong>2. Safety</strong></p>
+    <p>Regular inspections ensure critical safety systems (brakes, steering, suspension) are functioning properly, protecting you and your passengers.</p>
+    
+    <p><strong>3. Reliability</strong></p>
+    <p>Preventive maintenance dramatically reduces the likelihood of unexpected breakdowns, ensuring your vehicle is ready when you need it.</p>
+    
+    <p><strong>4. Resale Value</strong></p>
+    <p>A documented maintenance history significantly increases your vehicle's resale value. Buyers pay premium prices for well-maintained vehicles.</p>
+    
+    <p><strong>5. Cost Savings</strong></p>
+    <p>While preventive maintenance requires investment, it costs far less than major repairs or premature vehicle replacement.</p>
+    
+    <h3>Essential Preventive Maintenance Tasks</h3>
+    <ul>
+      <li>Regular oil and filter changes</li>
+      <li>Brake system inspection and service</li>
+      <li>Tire rotation and alignment</li>
+      <li>Coolant system service</li>
+      <li>Air filter replacement</li>
+      <li>Battery maintenance</li>
+      <li>Transmission service</li>
+      <li>Suspension inspection</li>
+    </ul>
+    
+    <p><strong>Start protecting your investment today.</strong> Schedule preventive maintenance with Stamford Auto Care.</p>
+  </div>
+</div>
+
+<div class="modal" id="article5">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeModal('article5')">×</button>
+    <h2>Vehicle Maintenance and Legal Responsibility</h2>
+    
+    <p>As a vehicle owner in Kenya, you have legal obligations regarding vehicle maintenance and safety. Understanding these responsibilities helps you avoid penalties and ensures compliance.</p>
+    
+    <h3>Legal Requirements in Kenya</h3>
+    
+    <p><strong>1. Roadworthiness</strong></p>
+    <p>The Traffic Act requires all vehicles to be in roadworthy condition. This means all safety systems must function properly, including brakes, lights, steering, and tires.</p>
+    
+    <p><strong>2. Annual Inspection</strong></p>
+    <p>Commercial vehicles and vehicles over a certain age must undergo annual roadworthiness inspections at authorized inspection centers.</p>
+    
+    <p><strong>3. Insurance Requirements</strong></p>
+    <p>Valid insurance requires the vehicle to be maintained in proper working condition. Failure to maintain your vehicle could void your insurance coverage.</p>
+    
+    <h3>Owner's Responsibilities</h3>
+    <ul>
+      <li>Ensure all lights and signals function properly</li>
+      <li>Maintain adequate tire tread depth (minimum 1.6mm)</li>
+      <li>Keep brakes in working condition</li>
+      <li>Address safety recalls promptly</li>
+      <li>Maintain steering and suspension systems</li>
+      <li>Ensure windshield wipers and washers work</li>
+      <li>Keep exhaust emissions within legal limits</li>
+    </ul>
+    
+    <h3>Consequences of Non-Compliance</h3>
+    <ul>
+      <li>Fines and penalties from traffic police</li>
+      <li>Vehicle impoundment</li>
+      <li>Invalidated insurance claims</li>
+      <li>Legal liability in case of accidents</li>
+      <li>Failed inspection certificates</li>
+    </ul>
+    
+    <h3>Protecting Yourself</h3>
+    <p>Maintain detailed service records documenting all maintenance and repairs. This provides evidence of compliance and protects you legally.</p>
+    
+    <p><strong>Stay compliant and safe.</strong> Regular maintenance at Stamford Auto Care ensures your vehicle meets all legal requirements.</p>
+  </div>
+</div>
+
+<div class="modal" id="article6">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeModal('article6')">×</button>
+    <h2>How Poor Vehicle Maintenance Can Affect Insurance Claims</h2>
+    
+    <p>Many vehicle owners don't realize that inadequate maintenance can result in denied insurance claims, leaving them financially responsible for accidents and damages.</p>
+    
+    <h3>Insurance Policy Requirements</h3>
+    <p>Most insurance policies contain clauses requiring policyholders to maintain their vehicles in safe, roadworthy condition. This is a fundamental condition of coverage.</p>
+    
+    <h3>How Maintenance Affects Claims</h3>
+    
+    <p><strong>1. Accident Claims</strong></p>
+    <p>If an accident is caused by or contributed to by poor maintenance (e.g., brake failure, tire blowout), your insurance company may:</p>
+    <ul>
+      <li>Deny the claim entirely</li>
+      <li>Reduce the payout amount</li>
+      <li>Hold you liable for damages to other parties</li>
+    </ul>
+    
+    <p><strong>2. Mechanical Failure Claims</strong></p>
+    <p>Insurance typically doesn't cover mechanical failures resulting from lack of maintenance. For example:</p>
+    <ul>
+      <li>Engine damage from not changing oil</li>
+      <li>Transmission failure from neglected service</li>
+      <li>Cooling system damage from ignored maintenance</li>
+    </ul>
+    
+    <p><strong>3. Third-Party Claims</strong></p>
+    <p>If poor maintenance causes an accident injuring others or damaging property, you could be personally liable if insurance denies coverage.</p>
+    
+    <h3>Evidence Insurers Look For</h3>
+    <p>During claim investigation, insurers may examine:</p>
+    <ul>
+      <li>Service history and records</li>
+      <li>Condition of worn components</li>
+      <li>Evidence of neglected warning signs</li>
+      <li>Expert mechanical assessments</li>
+    </ul>
+    
+    <h3>Protecting Your Coverage</h3>
+    <ul>
+      <li>Follow manufacturer's service schedules</li>
+      <li>Keep all service receipts and records</li>
+      <li>Address warning lights immediately</li>
+      <li>Document all maintenance work</li>
+      <li>Use professional service providers</li>
+    </ul>
+    
+    <p><strong>Protect your insurance coverage.</strong> Maintain proper service records with professional care at Stamford Auto Care.</p>
+  </div>
+</div>
+
+<div class="modal" id="article7">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeModal('article7')">×</button>
+    <h2>Roadworthiness Inspections and Compliance</h2>
+    
+    <p>Roadworthiness inspections are mandatory for certain vehicles in Kenya. Understanding the requirements and preparation process ensures smooth compliance.</p>
+    
+    <h3>Who Needs Inspection?</h3>
+    <ul>
+      <li>All commercial vehicles (matatus, trucks, buses)</li>
+      <li>Vehicles over 8 years old (varies by county)</li>
+      <li>Imported used vehicles</li>
+      <li>Vehicles after major accidents</li>
+      <li>Vehicles changing ownership in some cases</li>
+    </ul>
+    
+    <h3>What Inspectors Check</h3>
+    
+    <p><strong>1. Braking System</strong></p>
+    <ul>
+      <li>Brake pad/shoe thickness</li>
+      <li>Brake fluid condition</li>
+      <li>Parking brake effectiveness</li>
+      <li>Brake line condition</li>
+    </ul>
+    
+    <p><strong>2. Steering and Suspension</strong></p>
+    <ul>
+      <li>Steering play and response</li>
+      <li>Suspension component wear</li>
+      <li>Shock absorber condition</li>
+      <li>Wheel bearing condition</li>
+    </ul>
+    
+    <p><strong>3. Lights and Signals</strong></p>
+    <ul>
+      <li>Headlights (function and alignment)</li>
+      <li>Brake lights</li>
+      <li>Turn signals</li>
+      <li>Hazard lights</li>
+      <li>Reverse lights</li>
+    </ul>
+    
+    <p><strong>4. Tires and Wheels</strong></p>
+    <ul>
+      <li>Tread depth (minimum 1.6mm)</li>
+      <li>Tire condition (no cuts, bulges)</li>
+      <li>Proper tire size and type</li>
+      <li>Wheel security</li>
+    </ul>
+    
+    <p><strong>5. Emissions</strong></p>
+    <ul>
+      <li>Exhaust emissions levels</li>
+      <li>Exhaust system integrity</li>
+      <li>Emission control systems</li>
+    </ul>
+    
+    <p><strong>6. Body and Structure</strong></p>
+    <ul>
+      <li>Structural integrity</li>
+      <li>Door operation and safety</li>
+      <li>Windshield condition</li>
+      <li>Mirror functionality</li>
+    </ul>
+    
+    <h3>Preparing for Inspection</h3>
+    <ol>
+      <li>Schedule pre-inspection service to identify issues</li>
+      <li>Address all warning lights</li>
+      <li>Replace worn tires and brakes</li>
+      <li>Ensure all lights function</li>
+      <li>Fix any body damage affecting safety</li>
+      <li>Bring vehicle documents</li>
+    </ol>
+    
+    <h3>After Inspection</h3>
+    <p>If your vehicle passes, you'll receive an inspection certificate valid for one year. If it fails, you must address the identified issues and return for re-inspection.</p>
+    
+    <p><strong>Ensure your vehicle passes inspection.</strong> Get a comprehensive pre-inspection service at Stamford Auto Care.</p>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-col">
+      <h4>Stamford Auto Care</h4>
+      <p>Professional automotive repair and maintenance. 20+ years of trusted expertise along Mombasa Road, Nairobi.</p>
+    </div>
+    
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="index.html#services">Our Services</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="clinics.html">Car Clinics</a></li>
+    <li><a href="blog.html">Blog</a></li>
+        <li><a href="login.html">Customer Portal</a></li>
+      </ul>
+    </div>
+    
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li>📞 0720 269926</li>
+        <li>📍 Mombasa Road, Behind ICD, Nairobi</li>
+      </ul>
+    </div>
+  </div>
+  
+  <p>&copy; 2026 Stamford Auto Care. All rights reserved.</p>
+</footer>
+
+<script>
+function openModal(id) {
+  document.getElementById(id).classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('active');
+  document.body.style.overflow = 'auto';
+}
+
+// Close modal on outside click
+document.querySelectorAll('.modal').forEach(modal => {
+  modal.addEventListener('click', function(e) {
+    if (e.target === this) {
+      closeModal(this.id);
+    }
+  });
+});
+</script>
+
+</body>
+</html>

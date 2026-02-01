@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monthly Car Clinics - Stamford Auto Care</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --primary: #c9302c;
+      --dark: #2d3e50;
+      --sidebar-dark: #1a2332;
+      --light: #f8f9fa;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--light);
+    }
+    
+    /* Navbar */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 70px;
+      background: white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      z-index: 1000;
+    }
+    
+    .navbar-logo {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .navbar-logo img { height: 45px; }
+    
+    .navbar-logo span {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--dark);
+    }
+    
+    .navbar-right {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+    
+    .navbar-right a {
+      text-decoration: none;
+      color: #666;
+      font-weight: 500;
+    }
+    
+    .navbar-user {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      background: var(--light);
+    }
+    
+    .btn-book {
+      background: var(--primary);
+      color: white;
+      padding: 0.6rem 1.5rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    
+    /* Sidebar */
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 70px;
+      bottom: 0;
+      width: 240px;
+      background: var(--sidebar-dark);
+      color: white;
+      padding: 2rem 0;
+      overflow-y: auto;
+    }
+    
+    .user-info {
+      padding: 0 1.5rem;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+    
+    .user-info h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.3rem;
+    }
+    
+    .user-info p {
+      font-size: 0.85rem;
+      color: #aaa;
+    }
+    
+    .sidebar-nav {
+      list-style: none;
+    }
+    
+    .sidebar-nav li a {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 1.5rem;
+      color: #ccc;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+    
+    .sidebar-nav li a:hover,
+    .sidebar-nav li a.active {
+      background: rgba(201, 48, 44, 0.2);
+      color: white;
+      border-left: 3px solid var(--primary);
+    }
+    
+    .btn-book-sidebar {
+      display: block;
+      margin: 2rem 1.5rem;
+      padding: 0.8rem;
+      background: var(--primary);
+      color: white;
+      text-align: center;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    
+    .logout-btn {
+      display: block;
+      width: calc(100% - 3rem);
+      margin: 1rem 1.5rem;
+      padding: 0.8rem;
+      background: transparent;
+      color: #ccc;
+      border: 1px solid #444;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+    }
+    
+    /* Main Content */
+    .main-content {
+      margin-left: 240px;
+      margin-top: 70px;
+      padding: 2rem;
+      min-height: calc(100vh - 70px);
+    }
+    
+    .header {
+      margin-bottom: 2rem;
+    }
+    
+    .header h1 {
+      color: var(--dark);
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .header p {
+      color: #666;
+      font-size: 1.1rem;
+    }
+    
+    /* Hero Banner */
+    .clinic-hero {
+      background: linear-gradient(135deg, var(--primary), #a82824);
+      color: white;
+      padding: 3rem;
+      border-radius: 15px;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+    
+    .clinic-hero h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+    
+    .clinic-hero .next-clinic {
+      background: rgba(255,255,255,0.2);
+      padding: 1rem;
+      border-radius: 10px;
+      margin: 1.5rem 0;
+      font-size: 1.2rem;
+    }
+    
+    .clinic-hero .next-clinic strong {
+      display: block;
+      font-size: 1.5rem;
+      margin-top: 0.5rem;
+    }
+    
+    .btn-book-clinic {
+      background: white;
+      color: var(--primary);
+      padding: 1rem 2rem;
+      border-radius: 8px;
+      border: none;
+      font-weight: 700;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: inline-block;
+      text-decoration: none;
+      margin-top: 1rem;
+    }
+    
+    .btn-book-clinic:hover {
+      transform: scale(1.05);
+    }
+    
+    /* Benefits Section */
+    .benefits-section {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+    }
+    
+    .benefits-section h2 {
+      color: var(--dark);
+      margin-bottom: 1.5rem;
+      font-size: 1.5rem;
+    }
+    
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+    
+    .benefit-card {
+      padding: 1.5rem;
+      border: 2px solid #f0f0f0;
+      border-radius: 10px;
+      text-align: center;
+      transition: all 0.3s;
+    }
+    
+    .benefit-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-3px);
+    }
+    
+    .benefit-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+    
+    .benefit-card h3 {
+      color: var(--dark);
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+    }
+    
+    .benefit-card p {
+      color: #666;
+      font-size: 0.95rem;
+    }
+    
+    /* Clinics Tabs */
+    .tabs {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .tab-btn {
+      flex: 1;
+      padding: 1rem;
+      background: white;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+    
+    .tab-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    /* Clinic Cards */
+    .clinics-grid {
+      display: grid;
+      gap: 1.5rem;
+    }
+    
+    .clinic-card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      border-left: 4px solid var(--primary);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .clinic-info h3 {
+      color: var(--dark);
+      margin-bottom: 0.5rem;
+    }
+    
+    .clinic-info p {
+      color: #666;
+      font-size: 0.95rem;
+    }
+    
+    .clinic-status {
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    
+    .status-upcoming {
+      background: #fff3cd;
+      color: #856404;
+    }
+    
+    .status-completed {
+      background: #d4edda;
+      color: #155724;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      color: #999;
+    }
+    
+    .empty-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+<script src="data-manager.js"></script>
+
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="navbar-logo">
+    <img src="logo.png" alt="Stamford Auto Care">
+    <span>STAMFORD AUTO CARE</span>
+  </div>
+  <div class="navbar-right">
+    <a href="index.html#services">Services</a>
+    <a href="index.html#about">About</a>
+    <a href="blog.html">Blog</a>
+    <a href="index.html#booking" class="btn-book">Book Now</a>
+    <div class="navbar-user">
+      <span id="userName">👤 User</span>
+    </div>
+  </div>
+</nav>
+
+<!-- Sidebar -->
+<div class="sidebar">
+  <div class="user-info">
+    <h3 id="sidebarName">User</h3>
+    <p id="sidebarPhone">Phone</p>
+  </div>
+  
+  <ul class="sidebar-nav">
+    <li><a href="dashboard.html">📊 Dashboard</a></li>
+    <li><a href="vehicles.html">🚗 Vehicles</a></li>
+    <li><a href="appointments.html">📅 Appointments</a></li>
+    <li><a href="car-clinics.html" class="active">🏥 Car Clinics</a></li>
+    <li><a href="quotations.html">💰 Quotations</a></li>
+    <li><a href="invoices.html">📄 Invoices</a></li>
+    <li><a href="service-history.html">🔧 Service History</a></li>
+    <li><a href="profile.html">👤 Profile</a></li>
+  </ul>
+  
+  <a href="index.html#booking" class="btn-book-sidebar">📅 Book Appointment</a>
+  <button class="logout-btn" onclick="logout()">🚪 Logout</button>
+</div>
+
+<!-- Main Content -->
+<div class="main-content">
+  <div class="header">
+    <h1>🏥 Monthly Car Clinics</h1>
+    <p>Discounted vehicle check-ups every first Saturday of the month</p>
+  </div>
+  
+  <!-- Hero Banner -->
+  <div class="clinic-hero">
+    <h2>Join Our Monthly Car Clinic</h2>
+    <p>Professional vehicle inspection at special discounted rates!</p>
+    <div class="next-clinic">
+      Next Clinic:<br>
+      <strong id="nextClinicDate">Loading...</strong>
+    </div>
+    <button class="btn-book-clinic" onclick="bookClinic()">📅 Book Your Spot</button>
+  </div>
+  
+  <!-- Benefits Section -->
+  <div class="benefits-section">
+    <h2>Why Attend Our Car Clinics?</h2>
+    <div class="benefits-grid">
+      <div class="benefit-card">
+        <div class="benefit-icon">💰</div>
+        <h3>Special Discount</h3>
+        <p>Comprehensive vehicle check at discounted rates</p>
+      </div>
+      
+      <div class="benefit-card">
+        <div class="benefit-icon">🔍</div>
+        <h3>Early Detection</h3>
+        <p>Catch potential problems before they become expensive repairs</p>
+      </div>
+      
+      <div class="benefit-card">
+        <div class="benefit-icon">👨‍🔧</div>
+        <h3>Expert Technicians</h3>
+        <p>20+ years of automotive experience inspecting your vehicle</p>
+      </div>
+      
+      <div class="benefit-card">
+        <div class="benefit-icon">📋</div>
+        <h3>Full Report</h3>
+        <p>Detailed inspection report with recommendations</p>
+      </div>
+      
+      <div class="benefit-card">
+        <div class="benefit-icon">⏱️</div>
+        <h3>Quick Service</h3>
+        <p>Most inspections completed within 30-45 minutes</p>
+      </div>
+      
+      <div class="benefit-card">
+        <div class="benefit-icon">🛡️</div>
+        <h3>Safety First</h3>
+        <p>Ensure your vehicle is safe for you and your family</p>
+      </div>
+    </div>
+  </div>
+  
+  <!-- My Clinics Section -->
+  <div class="benefits-section">
+    <h2>My Clinic History</h2>
+    
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('upcoming')">Upcoming</button>
+      <button class="tab-btn" onclick="switchTab('past')">Past Clinics</button>
+    </div>
+    
+    <div id="upcomingTab" class="tab-content active">
+      <div class="clinics-grid" id="upcomingClinics">
+        <div class="empty-state">
+          <div class="empty-icon">📅</div>
+          <h3>No Upcoming Clinics</h3>
+          <p>Book your spot for the next clinic!</p>
+        </div>
+      </div>
+    </div>
+    
+    <div id="pastTab" class="tab-content">
+      <div class="clinics-grid" id="pastClinics">
+        <div class="empty-state">
+          <div class="empty-icon">🏥</div>
+          <h3>No Past Clinics</h3>
+          <p>Your attended clinics will appear here</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Initialize
+window.onload = function() {
+  const user = StamfordDataManager.currentUser.get();
+  if (!user) {
+    window.location.href = 'login.html';
+    return;
+  }
+  
+  document.getElementById('userName').textContent = `👤 ${user.firstName}`;
+  document.getElementById('sidebarName').textContent = `${user.firstName} ${user.lastName}`;
+  document.getElementById('sidebarPhone').textContent = user.phone;
+  
+  displayNextClinicDate();
+  loadClinics();
+};
+
+// Display next clinic date
+function displayNextClinicDate() {
+  const nextDate = StamfordDataManager.getNextClinicDate();
+  const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  document.getElementById('nextClinicDate').textContent = nextDate.toLocaleDateString('en-US', options);
+}
+
+// Book clinic via WhatsApp
+function bookClinic() {
+  const user = StamfordDataManager.currentUser.get();
+  const nextDate = StamfordDataManager.getNextClinicDate();
+  const dateStr = nextDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  
+  // Store clinic booking
+  const clinic = {
+    id: Date.now(),
+    userId: user.id,
+    date: nextDate.toISOString(),
+    status: 'upcoming',
+    bookedAt: new Date().toISOString(),
+    bookedVia: 'whatsapp'
+  };
+  
+  StamfordDataManager.clinics.add(clinic);
+  
+  // Redirect to WhatsApp
+  const text = `Hello Stamford Auto Care,%0A%0AI would like to book a spot for the Monthly Car Clinic.%0A%0ACustomer: ${user.firstName} ${user.lastName}%0APhone: ${user.phone}%0AClinic Date: ${dateStr}`;
+  
+  window.open(`https://wa.me/254720269926?text=${text}`, '_blank');
+  
+  // Reload clinics
+  setTimeout(() => loadClinics(), 1000);
+}
+
+// Load clinics
+function loadClinics() {
+  const user = StamfordDataManager.currentUser.get();
+  const upcoming = StamfordDataManager.clinics.getUpcoming(user.id);
+  const past = StamfordDataManager.clinics.getPast(user.id);
+  
+  displayClinics(upcoming, 'upcomingClinics', 'upcoming');
+  displayClinics(past, 'pastClinics', 'completed');
+}
+
+// Display clinics
+function displayClinics(clinics, containerId, statusClass) {
+  const container = document.getElementById(containerId);
+  
+  if (clinics.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">${statusClass === 'upcoming' ? '📅' : '🏥'}</div>
+        <h3>No ${statusClass === 'upcoming' ? 'Upcoming' : 'Past'} Clinics</h3>
+        <p>${statusClass === 'upcoming' ? 'Book your spot for the next clinic!' : 'Your attended clinics will appear here'}</p>
+      </div>
+    `;
+    return;
+  }
+  
+  container.innerHTML = clinics.map(clinic => {
+    const date = new Date(clinic.date);
+    const dateStr = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    
+    return `
+      <div class="clinic-card">
+        <div class="clinic-info">
+          <h3>Monthly Car Clinic</h3>
+          <p>📅 ${dateStr}</p>
+          <p>Booked: ${new Date(clinic.bookedAt).toLocaleDateString()}</p>
+        </div>
+        <div class="clinic-status status-${statusClass}">
+          ${statusClass === 'upcoming' ? 'Upcoming' : 'Completed'}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// Switch tabs
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+  
+  if (tab === 'upcoming') {
+    document.querySelector('.tab-btn:first-child').classList.add('active');
+    document.getElementById('upcomingTab').classList.add('active');
+  } else {
+    document.querySelector('.tab-btn:last-child').classList.add('active');
+    document.getElementById('pastTab').classList.add('active');
+  }
+}
+
+// Logout
+function logout() {
+  StamfordDataManager.currentUser.clear();
+  window.location.href = 'login.html';
+}
+</script>
+
+</body>
+</html>

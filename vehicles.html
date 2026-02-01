@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Vehicles - Stamford Auto Care</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --primary: #c9302c;
+      --dark: #2d3e50;
+      --sidebar-dark: #1a2332;
+      --light: #f8f9fa;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--light);
+    }
+    
+    /* Navbar */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 70px;
+      background: white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      z-index: 1000;
+    }
+    
+    .navbar-logo {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .navbar-logo img { height: 45px; }
+    
+    .navbar-logo span {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--dark);
+    }
+    
+    .navbar-right {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+    
+    .navbar-right a {
+      text-decoration: none;
+      color: #666;
+      font-weight: 500;
+    }
+    
+    .navbar-user {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      background: var(--light);
+    }
+    
+    .btn-book {
+      background: var(--primary);
+      color: white;
+      padding: 0.6rem 1.5rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    
+    /* Sidebar */
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 70px;
+      bottom: 0;
+      width: 240px;
+      background: var(--sidebar-dark);
+      color: white;
+      padding: 2rem 0;
+      overflow-y: auto;
+    }
+    
+    .user-info {
+      padding: 0 1.5rem;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+    
+    .user-info h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.3rem;
+    }
+    
+    .user-info p {
+      font-size: 0.85rem;
+      color: #aaa;
+    }
+    
+    .sidebar-nav {
+      list-style: none;
+    }
+    
+    .sidebar-nav li a {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 1.5rem;
+      color: #ccc;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+    
+    .sidebar-nav li a:hover,
+    .sidebar-nav li a.active {
+      background: rgba(201, 48, 44, 0.2);
+      color: white;
+      border-left: 3px solid var(--primary);
+    }
+    
+    .btn-book-sidebar {
+      display: block;
+      margin: 2rem 1.5rem;
+      padding: 0.8rem;
+      background: var(--primary);
+      color: white;
+      text-align: center;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    
+    .logout-btn {
+      display: block;
+      width: calc(100% - 3rem);
+      margin: 1rem 1.5rem;
+      padding: 0.8rem;
+      background: transparent;
+      color: #ccc;
+      border: 1px solid #444;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+    }
+    
+    /* Main Content */
+    .main-content {
+      margin-left: 240px;
+      margin-top: 70px;
+      padding: 2rem;
+      min-height: calc(100vh - 70px);
+    }
+    
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+    
+    .header h1 {
+      color: var(--dark);
+      font-size: 2rem;
+    }
+    
+    .btn-add {
+      background: var(--primary);
+      color: white;
+      padding: 0.8rem 1.5rem;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+    }
+    
+    .vehicles-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 1.5rem;
+    }
+    
+    .vehicle-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      transition: all 0.3s;
+    }
+    
+    .vehicle-card:hover {
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+      transform: translateY(-2px);
+    }
+    
+    .vehicle-header {
+      background: linear-gradient(135deg, var(--primary), #a82824);
+      color: white;
+      padding: 1.5rem;
+      text-align: center;
+    }
+    
+    .vehicle-icon {
+      font-size: 3rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .vehicle-header h3 {
+      font-size: 1.3rem;
+      margin-bottom: 0.3rem;
+    }
+    
+    .vehicle-header p {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+    
+    .vehicle-body {
+      padding: 1.5rem;
+    }
+    
+    .vehicle-detail {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.8rem 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .vehicle-detail:last-child {
+      border-bottom: none;
+    }
+    
+    .vehicle-detail label {
+      color: #999;
+      font-size: 0.9rem;
+    }
+    
+    .vehicle-detail span {
+      color: var(--dark);
+      font-weight: 600;
+    }
+    
+    .vehicle-actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+    
+    .btn-action {
+      flex: 1;
+      padding: 0.6rem;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    
+    .btn-service {
+      background: var(--primary);
+      color: white;
+    }
+    
+    .btn-edit {
+      background: transparent;
+      color: var(--primary);
+      border: 2px solid var(--primary);
+    }
+    
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: #999;
+    }
+    
+    .empty-state-icon {
+      font-size: 5rem;
+      margin-bottom: 1rem;
+    }
+    
+    .empty-state h2 {
+      color: var(--dark);
+      margin-bottom: 1rem;
+    }
+    
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    
+    .modal.active {
+      display: flex;
+    }
+    
+    .modal-content {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      max-width: 500px;
+      width: 100%;
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    
+    .modal-header h2 {
+      color: var(--dark);
+    }
+    
+    .btn-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #999;
+    }
+    
+    .form-group {
+      margin-bottom: 1.2rem;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: var(--dark);
+    }
+    
+    .form-group input {
+      width: 100%;
+      padding: 0.8rem;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+    
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+    
+    .modal-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    
+    .btn-cancel {
+      flex: 1;
+      padding: 0.8rem;
+      border-radius: 8px;
+      border: 2px solid #ddd;
+      background: transparent;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    
+    .btn-submit {
+      flex: 1;
+      padding: 0.8rem;
+      border-radius: 8px;
+      border: none;
+      background: var(--primary);
+      color: white;
+      cursor: pointer;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+<script src="data-manager.js"></script>
+
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="navbar-logo">
+    <img src="logo.png" alt="Stamford Auto Care">
+    <span>STAMFORD AUTO CARE</span>
+  </div>
+  <div class="navbar-right">
+    <a href="index.html#services">Services</a>
+    <a href="index.html#about">About</a>
+    <a href="blog.html">Blog</a>
+    <a href="index.html#booking" class="btn-book">Book Now</a>
+    <div class="navbar-user">
+      <span id="userName">👤 User</span>
+    </div>
+  </div>
+</nav>
+
+<!-- Sidebar -->
+<div class="sidebar">
+  <div class="user-info">
+    <h3 id="sidebarName">User</h3>
+    <p id="sidebarPhone">Phone</p>
+  </div>
+  
+  <ul class="sidebar-nav">
+    <li><a href="dashboard.html">📊 Dashboard</a></li>
+    <li><a href="vehicles.html" class="active">🚗 Vehicles</a></li>
+    <li><a href="appointments.html">📅 Appointments</a></li>
+    <li><a href="car-clinics.html">🏥 Car Clinics</a></li>
+    <li><a href="quotations.html">💰 Quotations</a></li>
+    <li><a href="invoices.html">📄 Invoices</a></li>
+    <li><a href="service-history.html">🔧 Service History</a></li>
+    <li><a href="profile.html">👤 Profile</a></li>
+  </ul>
+  
+  <a href="index.html#booking" class="btn-book-sidebar">📅 Book Appointment</a>
+  <button class="logout-btn" onclick="logout()">🚪 Logout</button>
+</div>
+
+<!-- Main Content -->
+<div class="main-content">
+  <div class="header">
+    <div>
+      <h1>🚗 My Vehicles</h1>
+      <p style="color: #666;">Manage your vehicle information</p>
+    </div>
+    <button class="btn-add" onclick="openAddModal()">+ Add Vehicle</button>
+  </div>
+  
+  <div class="vehicles-grid" id="vehiclesContainer">
+    <div class="empty-state">
+      <div class="empty-state-icon">🚗</div>
+      <h2>No Vehicles Added</h2>
+      <p>Add your first vehicle to start tracking services and maintenance</p>
+    </div>
+  </div>
+</div>
+
+<!-- Add Vehicle Modal -->
+<div class="modal" id="addModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Add Vehicle</h2>
+      <button class="btn-close" onclick="closeModal()">&times;</button>
+    </div>
+    
+    <form onsubmit="addVehicle(event)">
+      <div class="form-group">
+        <label>Vehicle Make</label>
+        <input type="text" id="make" placeholder="e.g., Toyota" required>
+      </div>
+      
+      <div class="form-group">
+        <label>Model</label>
+        <input type="text" id="model" placeholder="e.g., Mark X" required>
+      </div>
+      
+      <div class="form-group">
+        <label>Year</label>
+        <input type="number" id="year" placeholder="e.g., 2010" min="1900" max="2026" required>
+      </div>
+      
+      <div class="form-group">
+        <label>Registration Number</label>
+        <input type="text" id="registration" placeholder="e.g., KCE 123A" required>
+      </div>
+      
+      <div class="form-group">
+        <label>Mileage (km)</label>
+        <input type="number" id="mileage" placeholder="e.g., 85000" required>
+      </div>
+      
+      <div class="modal-actions">
+        <button type="button" class="btn-cancel" onclick="closeModal()">Cancel</button>
+        <button type="submit" class="btn-submit">Add Vehicle</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+window.onload = function() {
+  const user = StamfordDataManager.currentUser.get();
+  if (!user) {
+    window.location.href = 'login.html';
+    return;
+  }
+  
+  document.getElementById('userName').textContent = `👤 ${user.firstName}`;
+  document.getElementById('sidebarName').textContent = `${user.firstName} ${user.lastName}`;
+  document.getElementById('sidebarPhone').textContent = user.phone;
+  
+  loadVehicles();
+};
+
+function loadVehicles() {
+  const vehicles = JSON.parse(localStorage.getItem('vehicles') || '[]');
+  const container = document.getElementById('vehiclesContainer');
+  
+  if (vehicles.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state" style="grid-column: 1/-1;">
+        <div class="empty-state-icon">🚗</div>
+        <h2>No Vehicles Added</h2>
+        <p>Add your first vehicle to start tracking services and maintenance</p>
+      </div>
+    `;
+    return;
+  }
+  
+  container.innerHTML = vehicles.map(vehicle => `
+    <div class="vehicle-card">
+      <div class="vehicle-header">
+        <div class="vehicle-icon">🚗</div>
+        <h3>${vehicle.make} ${vehicle.model}</h3>
+        <p>${vehicle.registration}</p>
+      </div>
+      <div class="vehicle-body">
+        <div class="vehicle-detail">
+          <label>Year</label>
+          <span>${vehicle.year}</span>
+        </div>
+        <div class="vehicle-detail">
+          <label>Mileage</label>
+          <span>${vehicle.mileage.toLocaleString()} km</span>
+        </div>
+        <div class="vehicle-detail">
+          <label>Added</label>
+          <span>${new Date(vehicle.addedDate).toLocaleDateString()}</span>
+        </div>
+        <div class="vehicle-actions">
+          <button class="btn-action btn-service" onclick="bookVehicleService(${vehicle.id})">Book Service</button>
+          <button class="btn-action btn-edit" onclick="deleteVehicle(${vehicle.id})">Delete</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function openAddModal() {
+  document.getElementById('addModal').classList.add('active');
+}
+
+function closeModal() {
+  document.getElementById('addModal').classList.remove('active');
+  document.getElementById('make').value = '';
+  document.getElementById('model').value = '';
+  document.getElementById('year').value = '';
+  document.getElementById('registration').value = '';
+  document.getElementById('mileage').value = '';
+}
+
+function addVehicle(e) {
+  e.preventDefault();
+  
+  const vehicles = JSON.parse(localStorage.getItem('vehicles') || '[]');
+  
+  const newVehicle = {
+    id: Date.now(),
+    make: document.getElementById('make').value,
+    model: document.getElementById('model').value,
+    year: document.getElementById('year').value,
+    registration: document.getElementById('registration').value,
+    mileage: parseInt(document.getElementById('mileage').value),
+    addedDate: new Date().toISOString()
+  };
+  
+  vehicles.push(newVehicle);
+  localStorage.setItem('vehicles', JSON.stringify(vehicles));
+  
+  closeModal();
+  loadVehicles();
+}
+
+function deleteVehicle(id) {
+  if (confirm('Are you sure you want to delete this vehicle?')) {
+    let vehicles = JSON.parse(localStorage.getItem('vehicles') || '[]');
+    vehicles = vehicles.filter(v => v.id !== id);
+    localStorage.setItem('vehicles', JSON.stringify(vehicles));
+    loadVehicles();
+  }
+}
+
+function bookVehicleService(vehicleId) {
+  const user = StamfordDataManager.currentUser.get();
+  const vehicles = JSON.parse(localStorage.getItem('vehicles') || '[]');
+  const vehicle = vehicles.find(v => v.id === vehicleId);
+  
+  if (!vehicle) {
+    alert('Vehicle not found');
+    return;
+  }
+  
+  // Create vehicle service booking
+  const booking = {
+    id: Date.now(),
+    userId: user.id,
+    vehicleId: vehicleId,
+    type: 'vehicle_service',
+    vehicle: `${vehicle.make} ${vehicle.model}`,
+    registration: vehicle.registration,
+    mileage: vehicle.mileage,
+    status: 'pending',
+    createdAt: new Date().toISOString(),
+    bookedVia: 'whatsapp'
+  };
+  
+  // Save to appointments
+  const appointments = JSON.parse(localStorage.getItem('stamford_appointments') || '[]');
+  appointments.push(booking);
+  localStorage.setItem('stamford_appointments', JSON.stringify(appointments));
+  
+  // Create WhatsApp message specific to vehicle
+  const text = `Hello Stamford Auto Care,%0A%0A` +
+    `I need service for my vehicle:%0A%0A` +
+    `Vehicle: ${vehicle.make} ${vehicle.model}%0A` +
+    `Registration: ${vehicle.registration}%0A` +
+    `Year: ${vehicle.year}%0A` +
+    `Current Mileage: ${vehicle.mileage} km%0A%0A` +
+    `Owner: ${user.firstName} ${user.lastName}%0A` +
+    `Phone: ${user.phone}%0A` +
+    `Email: ${user.email}`;
+  
+  window.open(`https://wa.me/254720269926?text=${text}`, '_blank');
+  
+  alert('Service booking sent! We will contact you shortly.');
+}
+
+function logout() {
+  StamfordDataManager.currentUser.clear();
+  window.location.href = 'login.html';
+}
+</script>
+
+</body>
+</html>
